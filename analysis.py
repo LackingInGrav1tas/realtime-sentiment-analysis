@@ -58,8 +58,10 @@ def main(args):
 
         # setting up plot
         title = f"Tweet Sentiment Analysis - \"{args[1]}\""
-        plt.figure(num=title)
-        plt.title(title)
+        plt.rcParams["font.family"] = "Segoe UI" # old twitter font
+        plt.rcParams["font.weight"] = 600
+        plt.figure(num=title).patch.set_facecolor("#1DA1F2")
+        plt.title(title, color="white", weight=700)
 
         query_params = {'query': f'"{args[1]}" (-is:retweet)'}
         pos = 0
@@ -79,8 +81,8 @@ def main(args):
 
             # updating pie chart
             plt.clf()
-            plt.text(1, 1, f"Sample Size: {pos+neg}", fontsize="small")
-            plt.title(title)
+            plt.text(1, 1, f"Sample Size: {pos+neg}", fontsize="small", color="white")
+            plt.title(title, color="white", weight=700)
             plt.pie([pos, neg], labels=LABELS, colors=COLORS, autopct=lambda v: shorten(v))
             plt.pause(refresh_rate)
 
