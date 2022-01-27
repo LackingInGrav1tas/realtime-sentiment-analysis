@@ -17,8 +17,8 @@ Realtime sentiment analysis using the Twitter API
 
 ## How does it work?
 
-It finds new tweets fitting the query and checks if they contain one of [these negative connotation words](https://ptrckprry.com/course/ssd/data/negative-words.txt). Notably, this method is context free due to performance so judgements can be very inaccurate.
+It finds new tweets fitting the query and calculates their polarity using nltk's vader sentiment analysis. It then adds each value to it's corresponding category (Negative, Positive, Neutral).
 
 
 
-![image](https://user-images.githubusercontent.com/42680395/150697284-ec2a7767-3664-4257-8414-d30245cb1958.png)
+![image](https://user-images.githubusercontent.com/42680395/151384140-abdecc86-82ec-4fa4-af3b-953c7e9ce419.png)

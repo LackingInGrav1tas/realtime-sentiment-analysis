@@ -1,7 +1,8 @@
 import json, requests, nltk, pickle, sys
 import matplotlib.pyplot as plt
+from nltk.sentiment import SentimentIntensityAnalyzer
 
-neg_words = pickle.loads(open("wordlist.bin", "rb").read())
+sia = SentimentIntensityAnalyzer()
 
 def get_api_keys():
     """Gets API keys from file, returns (key, secret, bearer)"""
@@ -27,10 +28,9 @@ def connect_to_endpoint(url, params):
         raise Exception(response.status_code, response.text)
     return response.json()
 
-def negative(source):
-    for word in source:
-        if word in neg_words: return True
-    return False
+def analyze(source):
+    scores = sia.polarity_scores(source)
+    return (scores["neg"], scores["neu"], scores["pos"])
 
 def shorten(num):
     s = str(num)
@@ -39,8 +39,8 @@ def shorten(num):
         for i in range(5-len(s)): s += '0'
         return s
 
-LABELS = ["Positive", "Negative"]
-COLORS = ["blue", "red"]
+LABELS = ["Negative", "Neutral", "Positive"]
+COLORS = ["red", "grey", "blue"]
 
 def main(args):
     try:
@@ -66,9 +66,11 @@ def main(args):
         query_params = {'query': f'"{args[1]}" (-is:retweet)'}
         pos = 0
         neg = 0
+        neu = 0
         prev = None
+        size = 0
         while True:
-            print(f"\rpos: {pos} neg: {neg}  ({shorten(neg/(neg+pos if neg+pos != 0 else 1))}% negative)", end="")
+            print(f"\rpos: {pos} neg: {neg} neu: {neu}  ({shorten(neg/(neg+pos if neg+pos+neu != 0 else 1))}% negative)", end="                    ")
             
             json_response = connect_to_endpoint(search_url, query_params)
             data = json_response["data"]
@@ -76,14 +78,17 @@ def main(args):
                 plt.pause(0.00001) # so it doesn't get detected as unresponsive
                 continue
             for tweet in data:
-                if (negative(nltk.word_tokenize(tweet['text'].lower()))): neg += 1
-                else: pos += 1
+                size += 1
+                analysis = analyze(tweet["text"])
+                neg += analysis[0]
+                neu += analysis[1]
+                pos += analysis[2]
 
             # updating pie chart
             plt.clf()
-            plt.text(1, 1, f"Sample Size: {pos+neg}", fontsize="small", color="white")
+            plt.text(1, 1, f"Sample Size: {size}", fontsize="small", color="white")
             plt.title(title, color="white", weight=700)
-            plt.pie([pos, neg], labels=LABELS, colors=COLORS, autopct=lambda v: shorten(v))
+            plt.pie([neg, neu, pos], labels=LABELS, colors=COLORS, autopct=lambda v: shorten(v))
             plt.pause(refresh_rate)
 
             # ensuring new data
