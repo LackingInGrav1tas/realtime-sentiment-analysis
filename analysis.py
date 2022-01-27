@@ -39,8 +39,8 @@ def shorten(num):
         for i in range(5-len(s)): s += '0'
         return s
 
-LABELS = ["Negative", "Neutral", "Positive"]
-COLORS = ["red", "grey", "blue"]
+LABELS = ["Negative", "Positive"]
+COLORS = ["red", "blue"]
 
 def main(args):
     try:
@@ -81,14 +81,14 @@ def main(args):
                 size += 1
                 analysis = analyze(tweet["text"])
                 neg += analysis[0]
-                neu += analysis[1]
+                # neu += analysis[1]
                 pos += analysis[2]
 
             # updating pie chart
             plt.clf()
             plt.text(1, 1, f"Sample Size: {size}", fontsize="small", color="white")
             plt.title(title, color="white", weight=700)
-            plt.pie([neg, neu, pos], labels=LABELS, colors=COLORS, autopct=lambda v: shorten(v))
+            plt.pie([neg, pos], labels=LABELS, colors=COLORS, autopct=lambda v: shorten(v))
             plt.pause(refresh_rate)
 
             # ensuring new data
@@ -98,8 +98,8 @@ def main(args):
         print("\nexiting...")
     except KeyError:
         print("\nexiting, no data exists...")
-    except:
-        print("\nexiting due to error...")
+    #except:
+    #    print("\nexiting due to error...")
 
 if __name__ == "__main__":
     main(sys.argv)

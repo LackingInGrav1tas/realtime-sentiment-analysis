@@ -17,8 +17,8 @@ Realtime sentiment analysis using the Twitter API
 
 ## How does it work?
 
-It finds new tweets fitting the query and calculates their polarity using nltk's vader sentiment analysis. It then adds each value to it's corresponding category (Negative, Positive, Neutral).
+It finds new tweets fitting the query and calculates their polarity using nltk's vader sentiment analysis. It then adds each value to it's corresponding category (Negative, Positive).
 
 
 
-![image](https://user-images.githubusercontent.com/42680395/151384140-abdecc86-82ec-4fa4-af3b-953c7e9ce419.png)
+![image](https://user-images.githubusercontent.com/42680395/151404573-350c7dab-c3ad-4f20-8376-baf40fda4eb7.png)
