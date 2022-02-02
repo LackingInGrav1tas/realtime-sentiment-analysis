@@ -1,4 +1,4 @@
-import json, requests, nltk, pickle, sys
+import json, requests, sys
 import matplotlib.pyplot as plt
 from nltk.sentiment import SentimentIntensityAnalyzer
 
