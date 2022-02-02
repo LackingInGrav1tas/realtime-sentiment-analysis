@@ -14,11 +14,9 @@ keys = get_api_keys()
 
 def bearer_oauth(r):
     """ Method required by bearer token authentication. """
-
     r.headers["Authorization"] = f"Bearer {keys[2]}"
     r.headers["User-Agent"] = "v2FilteredStreamPython"
     return r
-
 
 search_url = "https://api.twitter.com/2/tweets/search/recent"
 
@@ -46,8 +44,7 @@ def main(args):
     try:
         # parsing refresh rate
         refresh_rate = 4
-        try: 
-            refresh_rate = float(args[2])
+        try: refresh_rate = float(args[2])
         except: pass
 
         try:
@@ -98,8 +95,6 @@ def main(args):
         print("\nexiting...")
     except KeyError:
         print("\nexiting, no data exists...")
-    #except:
-    #    print("\nexiting due to error...")
 
 if __name__ == "__main__":
     main(sys.argv)
