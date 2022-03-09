@@ -37,6 +37,12 @@ def shorten(num):
         for i in range(5-len(s)): s += '0'
         return s
 
+def percent(val, l):
+    s = 0
+    for v in l:
+        s += v
+    return ( (val / s) * 100 ) if s > 0 else 0
+
 LABELS = ["Negative", "Positive"]
 COLORS = ["red", "blue"]
 
@@ -67,7 +73,7 @@ def main(args):
         prev = None
         size = 0
         while True:
-            print(f"\rpos: {pos} neg: {neg} neu: {neu}  ({shorten(neg/(neg+pos if neg+pos+neu != 0 else 1))}% negative)", end="                    ")
+            print(f"\rpos: {pos} neg: {neg} neu: {neu}  ({shorten(percent(neg, [pos, neg]))}% negative)", end="                    ")
             
             json_response = connect_to_endpoint(search_url, query_params)
             data = json_response["data"]
@@ -78,12 +84,12 @@ def main(args):
                 size += 1
                 analysis = analyze(tweet["text"])
                 neg += analysis[0]
-                # neu += analysis[1]
+                neu += analysis[1]
                 pos += analysis[2]
 
             # updating pie chart
             plt.clf()
-            plt.text(1, 1, f"Sample Size: {size}", fontsize="small", color="white")
+            plt.text(1, 1, f"Sample Size: {size}\n% Neutral: {shorten(percent(neu, [pos, neg, neu]))}", fontsize="small", color="white")
             plt.title(title, color="white", weight=700)
             plt.pie([neg, pos], labels=LABELS, colors=COLORS, autopct=lambda v: shorten(v))
             plt.pause(refresh_rate)
